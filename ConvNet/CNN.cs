@@ -1,11 +1,10 @@
 ﻿using System;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using ConvNet.Core;
 using System.IO;
-using System.Text;
 using System.Linq;
+using ConvNet.Core.Layers;
 
 namespace ConvNet.Test
 {
@@ -25,19 +24,21 @@ namespace ConvNet.Test
         public static List<int> predictions = new List<int>();
         public static void Main()
         {
-            //List<List<Slice>> Test = getDataTensor();
+            List<List<Slice>> Test = getDataTensor();
             //printDimensions(Test);
 
             Weights wt = readJson();
             Model net = new Model();
-            net.AddLayer(new ConvLayer());
-            net.AddLayer(new ConvLayer());
-            net.AddLayer(new PoolLayer());
-            net.AddLayer(new FlattenLayer());
-            net.AddLayer(new DenseLayer());
-            net.AddLayer(new DenseLayer());
 
-            var preds = net.Forward(test);
+            //Prepare parameters for Layers
+            net.AddLayer(new ConvLayer(new Dictionary<string, object> { ["filter_count"] = 32, ["kernel_size"] = new Tuple<int, int>(1, 8), ["strides"] = new Tuple<int, int>(1, 4), ["activation"] = "relu" }));
+            net.AddLayer(new ConvLayer(new Dictionary<string, object> { ["filter_count"] = 32, ["kernel_size"] = new Tuple<int, int>(1, 3), ["strides"] = new Tuple<int, int>(1, 1), ["activation"] = "relu" }));
+            net.AddLayer(new PoolLayer(new Dictionary<string, object> { ["kernel_size"] = new Tuple<int, int>(2, 2), ["strides"] = new Tuple<int, int>(1, 1)}));
+            net.AddLayer(new FlattenLayer());
+            net.AddLayer(new DenseLayer(new Dictionary<string, object> { ["neurons"] = 512, ["activation"]= "relu"}));
+            net.AddLayer(new DenseLayer(new Dictionary<string, object> { ["neurons"] = 1, ["activation"] = "sigmoid" }));
+
+            var preds = net.Forward(Test);
         }
 
         public static List<List<Slice>> getDataTensor()

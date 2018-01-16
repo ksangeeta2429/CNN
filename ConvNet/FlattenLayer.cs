@@ -8,6 +8,7 @@ namespace ConvNet.Core.Layers
 {
     public class FlattenLayer: BaseLayer
     {
+        public FlattenLayer() { }
         public FlattenLayer(Dictionary<string, object> data): base(data)
         {
 

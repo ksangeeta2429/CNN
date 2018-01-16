@@ -53,6 +53,7 @@
     <Compile Include="ConvLayer.cs" />
     <Compile Include="DenseLayer.cs" />
     <Compile Include="FlattenLayer.cs" />
+    <Compile Include="InputLayer.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="PoolLayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
