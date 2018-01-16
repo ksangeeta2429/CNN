@@ -29,7 +29,7 @@ namespace ConvNet.Test
             //printDimensions(Test);
 
             Weights wt = readJson();
-            /*Model net = new Model();
+            Model net = new Model();
             net.AddLayer(new ConvLayer());
             net.AddLayer(new ConvLayer());
             net.AddLayer(new PoolLayer());
@@ -37,7 +37,7 @@ namespace ConvNet.Test
             net.AddLayer(new DenseLayer());
             net.AddLayer(new DenseLayer());
 
-            var preds = net.Forward(test);*/
+            var preds = net.Forward(test);
         }
 
         public static List<List<Slice>> getDataTensor()
