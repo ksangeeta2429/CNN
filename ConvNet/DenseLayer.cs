@@ -8,8 +8,10 @@ namespace ConvNet.Core.Layers
 {
     public class DenseLayer: BaseLayer
     {
-        public DenseLayer(Dictionary<string, object> data): base(data)
+        public DenseLayer(double[] W, double[] bias, Dictionary<string, object> data): base(data)
         {
+            this.Weights = W;
+            this.Bias = bias;
             this.NeuronCount = Convert.ToInt16(data["neurons"]);
             this.Activation = Convert.ToString(data["activation"]);
             if (NeuronCount == 1)

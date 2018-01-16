@@ -31,12 +31,12 @@ namespace ConvNet.Test
             Model net = new Model();
 
             //Prepare parameters for Layers
-            net.AddLayer(new ConvLayer(new Dictionary<string, object> { ["filter_count"] = 32, ["kernel_size"] = new Tuple<int, int>(1, 8), ["strides"] = new Tuple<int, int>(1, 4), ["activation"] = "relu" }));
-            net.AddLayer(new ConvLayer(new Dictionary<string, object> { ["filter_count"] = 32, ["kernel_size"] = new Tuple<int, int>(1, 3), ["strides"] = new Tuple<int, int>(1, 1), ["activation"] = "relu" }));
+            net.AddLayer(new ConvLayer(wt.Conv1, wt.Bias_Conv1, new Dictionary<string, object> { ["filter_count"] = 32, ["kernel_size"] = new Tuple<int, int>(1, 8), ["strides"] = new Tuple<int, int>(1, 4), ["activation"] = "relu" }));
+            net.AddLayer(new ConvLayer(wt.Conv2, wt.Bias_Conv2, new Dictionary<string, object> { ["filter_count"] = 32, ["kernel_size"] = new Tuple<int, int>(1, 3), ["strides"] = new Tuple<int, int>(1, 1), ["activation"] = "relu" }));
             net.AddLayer(new PoolLayer(new Dictionary<string, object> { ["kernel_size"] = new Tuple<int, int>(2, 2), ["strides"] = new Tuple<int, int>(1, 1)}));
             net.AddLayer(new FlattenLayer());
-            net.AddLayer(new DenseLayer(new Dictionary<string, object> { ["neurons"] = 512, ["activation"]= "relu"}));
-            net.AddLayer(new DenseLayer(new Dictionary<string, object> { ["neurons"] = 1, ["activation"] = "sigmoid" }));
+            net.AddLayer(new DenseLayer(wt.Dense, wt.Bias_Dense, new Dictionary<string, object> { ["neurons"] = 512, ["activation"]= "relu"}));
+            net.AddLayer(new DenseLayer(wt.LastWt, new double[1] { 0 }, new Dictionary<string, object> { ["neurons"] = 1, ["activation"] = "sigmoid" }));
 
             var preds = net.Forward(Test);
         }

@@ -9,8 +9,10 @@ namespace ConvNet.Core.Layers
     public class ConvLayer: BaseLayer
     {
         //Keras Equivalent: Conv2D(32, kernel_size=(1, 8), strides=(1, 4), input_shape=(16, 32, 1), padding='same', activation='relu')
-        public ConvLayer(Dictionary<string, object> data) : base(data)
+        public ConvLayer(List<List<Slice>> kernelWts, double[] bias, Dictionary<string, object> data) : base(data)
         {
+            this.Kernels = kernelWts;
+            this.Bias = bias;
             this.FilterCount = Convert.ToInt32(data["filter_count"]);
             this.KernelSizes = (Tuple<int, int>) data["kernel_size"];
             this.Strides = (Tuple<int, int>)data["strides"];
