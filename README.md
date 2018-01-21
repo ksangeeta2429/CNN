@@ -21,12 +21,14 @@ model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy']
 
 The Weights of the above trained model is dumped into a json file in the following way:\
 dict = {}\
-dict["conv1"] = model.get_weights()[0].tolist() Shape (1 8 1 32)\
-dict["bias1"] = model.get_weights()[1].tolist() Shape (32, )\
-dict["conv2"] = model.get_weights()[2].tolist() Shape (1 3 32 32)\
-dict["bias2"] = model.get_weights()[3].tolist() Shape (32, )\
-dict["dense"] = model.get_weights()[5].tolist() Shape (512,  )\
-dict["bias3"] = model.get_weights()[6].tolist() Shape (512, 1)\
+dict["conv1"]       = model.layers[0].get_weights()[0].tolist() #(1, 8, 1, 32)\
+dict["bias_conv1"]  = model.layers[0].get_weights()[1].tolist() #(32,)\
+dict["conv2"]       = model.layers[2].get_weights()[0].tolist() #(1, 3, 32, 32)\
+dict["bias_conv2"]  = model.layers[2].get_weights()[1].tolist() #(32,)\
+dict["dense1"]      = model.layers[5].get_weights()[0].tolist() #(1024, 512)\
+dict["bias_dense1"] = model.layers[5].get_weights()[1].tolist() #(512,)\
+dict["dense2"]      = model.layers[7].get_weights()[0].tolist() #(512, 1)\
+dict["bias_dense2"] = model.layers[7].get_weights()[1].tolist() #(1,)\
 dict["last"] = model.get_weights()[7].tolist() Last Layer Weight 
 
 import json
