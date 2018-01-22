@@ -31,7 +31,6 @@ dict["dense1"]      = model.layers[5].get_weights()[0].tolist()     # Shape: (10
 dict["bias_dense1"] = model.layers[5].get_weights()[1].tolist()     # Shape: (512,)
 dict["dense2"]      = model.layers[7].get_weights()[0].tolist()     # Shape: (512, 1)
 dict["bias_dense2"] = model.layers[7].get_weights()[1].tolist()     # Shape: (1,)
-dict["last"] = model.get_weights()[7].tolist() Last Layer Weight 
 
 import json
 with open('weights.json', 'w') as fp:
