@@ -13,11 +13,12 @@ namespace ConvNet.Test
         public Weights() { }
         public List<List<Slice>> Conv1 { get; set; }
         public List<List<Slice>> Conv2 { get; set; }
-        public double[] Dense { get; set; }
+        public List<double[]> Dense1 { get; set; }
+        public List<double[]> Dense2 { get; set; }
         public double[] Bias_Conv1 { get; set; }
         public double[] Bias_Conv2 { get; set; }
-        public double[] Bias_Dense { get; set; }
-        public double[] LastWt { get; set; }
+        public double[] Bias_Dense1 { get; set; }
+        public double[] Bias_Dense2 { get; set; }
     }
     class CNN
     {
@@ -27,8 +28,8 @@ namespace ConvNet.Test
             List<List<Slice>> Test = getDataTensor();
             //printDimensions(Test);
 
-            Weights wt = readJson();
-            Model net = new Model();
+            Weights wt = readJSON();
+            /*Model net = new Model();
 
             //Prepare parameters for Layers
             net.AddLayer(new ConvLayer(wt.Conv1, wt.Bias_Conv1, new Dictionary<string, object> { ["filter_count"] = 32, ["kernel_size"] = new Tuple<int, int>(1, 8), ["strides"] = new Tuple<int, int>(1, 4), ["activation"] = "relu" }));
@@ -38,7 +39,7 @@ namespace ConvNet.Test
             net.AddLayer(new DenseLayer(wt.Dense, wt.Bias_Dense, new Dictionary<string, object> { ["neurons"] = 512, ["activation"]= "relu"}));
             net.AddLayer(new DenseLayer(wt.LastWt, new double[1] { 0 }, new Dictionary<string, object> { ["neurons"] = 1, ["activation"] = "sigmoid" }));
 
-            var preds = net.Forward(Test);
+            var preds = net.Forward(Test);*/
         }
 
         public static List<List<Slice>> getDataTensor()
@@ -92,7 +93,7 @@ namespace ConvNet.Test
             Console.ReadLine();
         }
 
-        public static Weights readJson()
+        public static Weights readJSON()
         {
             Weights wt = new Test.Weights();
             StreamReader r = new StreamReader("c:/users/sangeeta/desktop/ConvNet/weights.json");
@@ -101,13 +102,34 @@ namespace ConvNet.Test
             JObject o = JObject.Parse(json);
             wt.Conv1 = formTensor((JArray)o["conv1"]);
             wt.Conv2 = formTensor((JArray)o["conv2"]);
-            wt.Bias_Conv1 = ((JArray)o["bias1"]).Select(jv => (double)jv).ToArray();
-            wt.Bias_Conv2 = ((JArray)o["bias2"]).Select(jv => (double)jv).ToArray();
-            wt.Bias_Dense = ((JArray)o["bias3"]).Select(jv => (double)jv[0]).ToArray();
-            wt.Dense = ((JArray)o["dense"]).Select(jv => (double)jv).ToArray();
-            wt.LastWt[0] = (double)o["last"][0];
+            wt.Bias_Conv1 = ((JArray)o["bias_conv1"]).Select(jv => (double)jv).ToArray();
+            wt.Bias_Conv2 = ((JArray)o["bias_conv2"]).Select(jv => (double)jv).ToArray();
+            wt.Bias_Dense1 = ((JArray)o["bias_dense1"]).Select(jv => (double)jv).ToArray();
+            wt.Bias_Dense2 = ((JArray)o["bias_dense2"]).Select(jv => (double)jv).ToArray();
+            wt.Dense1 = new List<double[]>();
+            wt.Dense2 = new List<double[]>();
 
-            Console.WriteLine(wt.Conv1[0][0].getValue(0, 7));
+            //Transpose the FC Weights and save
+            for (int i=0; i < ((JArray)o["dense1"][0]).Count; i++)
+            {
+                double[] arr = new double[((JArray)o["dense1"]).Count];
+                for(int j=0; j < ((JArray)o["dense1"]).Count; j++)
+                {
+                    arr[j] = (double)o["dense1"][j][i];
+                }
+                wt.Dense1.Add(arr);
+            }
+
+            for (int i = 0; i < ((JArray)o["dense2"][0]).Count; i++)
+            {
+                double[] arr = new double[((JArray)o["dense2"]).Count];
+                for (int j = 0; j < ((JArray)o["dense2"]).Count; j++)
+                {
+                    arr[j] = (double)o["dense2"][j][i];
+                }
+                wt.Dense2.Add(arr);
+            }
+
             Console.ReadKey();
             return wt;
         }

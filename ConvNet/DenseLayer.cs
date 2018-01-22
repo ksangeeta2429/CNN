@@ -8,7 +8,7 @@ namespace ConvNet.Core.Layers
 {
     public class DenseLayer: BaseLayer
     {
-        public DenseLayer(double[] W, double[] bias, Dictionary<string, object> data): base(data)
+        public DenseLayer(List<double[]> W, double[] bias, Dictionary<string, object> data): base(data)
         {
             this.Weights = W;
             this.Bias = bias;
@@ -20,7 +20,7 @@ namespace ConvNet.Core.Layers
                 this.isLast = false;
         }
 
-        public double[] Weights { get; set;  }
+        public List<double[]> Weights { get; set;  }
         public double[] Bias { get; set;  }
         public int NeuronCount { get; set; }
         public string Activation { get; set; }
@@ -51,7 +51,7 @@ namespace ConvNet.Core.Layers
                     Slice s = new Slice(1, 1);
                     double sum = 0.0;
                     for (int d = 0; d < InputDepth; d++)
-                        sum = sum + Weights[c] * input[i][d].getValue(0, 0);
+                        sum = sum + Weights[c][d] * input[i][d].getValue(0, 0);
 
                     if (this.Activation == "relu")
                         values[0] = sum + Bias[c]  <= 0 ? 0 : sum + Bias[c];
@@ -59,7 +59,7 @@ namespace ConvNet.Core.Layers
                     else if (this.Activation == "sigmoid")
                     {
                         if(isLast)
-                            values[0] = 1.0 / (1.0 + Math.Exp(-(sum))) > 0.5 ? 1 : 0;
+                            values[0] = 1.0 / (1.0 + Math.Exp(-(sum + Bias[c]))) > 0.5 ? 1 : 0;
                         else
                             values[0] = 1.0 / (1.0 + Math.Exp(-(sum + Bias[c])));
                     }
