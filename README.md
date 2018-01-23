@@ -20,7 +20,7 @@ model.add(Dense(1, activation='sigmoid'))
 model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 ```
 
-The Weights of the above trained model is dumped into a json file in the following way:\
+The Weights of the above trained model is dumped into a json file in the following way:
 ```python
 dict = {}
 dict["conv1"]       = model.layers[0].get_weights()[0].tolist()     # Shape: (1, 8, 1, 32)
